@@ -1,5 +1,6 @@
 package com.group32.homework07;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +21,11 @@ import java.util.ArrayList;
 
 public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRecyclerViewAdapter.ViewHolder> {
 
+    private IContactsListHandler listHandler;
     private ArrayList<User> userList;
 
-    public ContactsRecyclerViewAdapter() {
+    public ContactsRecyclerViewAdapter(IContactsListHandler listHandler) {
+        this.listHandler = listHandler;
         userList = new ArrayList<>();
 
         FirebaseDatabase.getInstance().getReference("users").addChildEventListener(new ChildEventListener() {
@@ -57,9 +60,11 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
     class ViewHolder extends RecyclerView.ViewHolder{
         ImageView imagePicture;
         TextView textFullname;
+        View itemView;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             imagePicture = (ImageView) itemView.findViewById(R.id.imageContactPicture);
             textFullname = (TextView) itemView.findViewById(R.id.textContactFullname);
         }
@@ -72,12 +77,23 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        User currentUser = userList.get(position);
+        final User currentUser = userList.get(position);
         holder.textFullname.setText(currentUser.fullName());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listHandler.onContactChosen(currentUser.getUid());
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return userList.size();
+    }
+
+    interface IContactsListHandler{
+        void onContactChosen(String uid);
     }
 }

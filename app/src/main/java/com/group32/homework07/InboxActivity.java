@@ -4,13 +4,17 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -18,7 +22,7 @@ import java.util.ArrayList;
 
 public class InboxActivity extends AppCompatActivity{
 
-    private static int CHOOSE_CONTACT_REQUEST_CODE = 1;
+    public static int CHOOSE_CONTACT_REQUEST_CODE = 1;
 
     private FirebaseAuth mAuth;
     private User currentUser;
@@ -54,5 +58,25 @@ public class InboxActivity extends AppCompatActivity{
                 startActivityForResult(intent, CHOOSE_CONTACT_REQUEST_CODE);
             }
         });
+
+        RecyclerView conversationList = (RecyclerView) findViewById(R.id.recylcerConversationList);
+        conversationList.setAdapter(new ConversationRecyclerViewAdapter());
+        conversationList.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CHOOSE_CONTACT_REQUEST_CODE) {
+            String uid = data.getStringExtra("uid");
+
+            // Create empty conversation and add this to the database
+            DatabaseReference userConversations = FirebaseDatabase.getInstance().getReference(mAuth.getCurrentUser().getUid());
+            String conversationId =  userConversations.push().getKey();
+            Conversation newConversation = new Conversation(uid,conversationId);
+            userConversations.child(conversationId).setValue(newConversation);
+
+
+            // Pass the conversation object to the chat activity
+        }
     }
 }
