@@ -19,8 +19,10 @@ import java.util.ArrayList;
 public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<ConversationRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<Conversation> conversationList;
+    private IConversationListHandler conversationListHandler;
 
-    public ConversationRecyclerViewAdapter() {
+    public ConversationRecyclerViewAdapter(IConversationListHandler handler) {
+        this.conversationListHandler = handler;
         conversationList = new ArrayList<>();
 
         DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -78,7 +80,7 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Conversation currentConversation = conversationList.get(position);
+        final Conversation currentConversation = conversationList.get(position);
         if (currentConversation.getMessages().size()>0) {
             holder.textMessage.setText(currentConversation.getMessages().get(0).getMessageText());
         } else {
@@ -87,10 +89,21 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
 
         holder.textSender.setText(currentConversation.getWithUser());
         holder.textTime.setText(currentConversation.getLastMessageDate().toString());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                conversationListHandler.displayConversation(currentConversation.getConversationId());
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return conversationList.size();
+    }
+
+    interface IConversationListHandler{
+        void displayConversation(String conversationId);
     }
 }
