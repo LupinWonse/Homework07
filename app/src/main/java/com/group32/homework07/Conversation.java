@@ -2,22 +2,23 @@ package com.group32.homework07;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Conversation {
 
     private String conversationId;
     private String withUser;
     private Date lastMessageDate;
-    private ArrayList<Message> messages;
+    private HashMap<String,Message> messages;
 
     public Conversation() {
-        this.messages = new ArrayList<>();
+        this.messages = new HashMap<>();
     }
 
     public Conversation(String withUser, String conversationId) {
         this.withUser = withUser;
         this.lastMessageDate = new Date();
-        this.messages = new ArrayList<>();
+        this.messages = new HashMap<>();
         this.conversationId = conversationId;
     }
 
@@ -45,14 +46,13 @@ public class Conversation {
         this.lastMessageDate = lastMessageDate;
     }
 
-    public ArrayList<Message> getMessages() {
+    public HashMap<String, Message> getMessages() {
         return messages;
     }
 
-    public void setMessages(ArrayList<Message> messages) {
+    public void setMessages(HashMap<String, Message> messages) {
         this.messages = messages;
     }
-
 
     @Override
     public boolean equals(Object o) {

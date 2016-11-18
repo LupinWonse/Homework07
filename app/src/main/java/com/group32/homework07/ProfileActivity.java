@@ -17,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ProfileActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
+public class ProfileActivity extends AppCompatActivity{
 
     FirebaseAuth mAuth;
     FirebaseDatabase mDatabase;
@@ -43,7 +43,33 @@ public class ProfileActivity extends AppCompatActivity implements FirebaseAuth.A
         buttonCancel = (Button) findViewById(R.id.buttonProfileCancel);
 
         mAuth = FirebaseAuth.getInstance();
-        mAuth.addAuthStateListener(this);
+        //mAuth.addAuthStateListener(this);
+
+        // Check user is logged in and display profile data
+        if (mAuth.getCurrentUser() != null) {
+            DatabaseReference userDatabaseReference =  FirebaseDatabase.getInstance().getReference("users").child(mAuth.getCurrentUser().getUid());
+            userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user != null){
+                        currentUser = user;
+                        displayUser();
+                    } else {
+                        // If there is no profile the user MUST save the profile information
+                        // Therefore no cancel is allowed
+                        buttonCancel.setVisibility(View.GONE);
+                        currentUser = new User();
+                        currentUser.setEmail(mAuth.getCurrentUser().getEmail());
+                        currentUser.setUid(mAuth.getCurrentUser().getUid());
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
+
 
         mDatabase = FirebaseDatabase.getInstance();
 
@@ -55,32 +81,6 @@ public class ProfileActivity extends AppCompatActivity implements FirebaseAuth.A
         });
     }
 
-    @Override
-    public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
-        if (mAuth.getCurrentUser() != null) {
-            DatabaseReference userDatabaseReference =  FirebaseDatabase.getInstance().getReference("users").child(firebaseAuth.getCurrentUser().getUid());
-            userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    User user = dataSnapshot.getValue(User.class);
-                        if (user != null){
-                            currentUser = user;
-                            displayUser();
-                        } else {
-                            // If there is no profile the user MUST save the profile information
-                            // Therefore no cancel is allowed
-                            buttonCancel.setVisibility(View.GONE);
-                            currentUser = new User();
-                            currentUser.setEmail(firebaseAuth.getCurrentUser().getEmail());
-                            currentUser.setUid(firebaseAuth.getCurrentUser().getUid());
-                        }
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
-    }
 
     private void displayUser(){
         editFirstname.setText(currentUser.getFirstName());

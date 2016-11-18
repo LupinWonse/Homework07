@@ -6,13 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 
 public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<Message> messages;
+
+    public MessageRecyclerViewAdapter(ArrayList<Message> messages) {
+        this.messages = messages;
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder{
 

@@ -82,7 +82,7 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Conversation currentConversation = conversationList.get(position);
         if (currentConversation.getMessages().size()>0) {
-            holder.textMessage.setText(currentConversation.getMessages().get(0).getMessageText());
+            //holder.textMessage.setText(currentConversation.getMessages().get(0).getMessageText());
         } else {
             holder.textMessage.setText("No messages in this conversation");
         }

@@ -20,7 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class InboxActivity extends AppCompatActivity{
+public class InboxActivity extends AppCompatActivity implements ConversationRecyclerViewAdapter.IConversationListHandler{
 
     public static int CHOOSE_CONTACT_REQUEST_CODE = 1;
 
@@ -60,7 +60,7 @@ public class InboxActivity extends AppCompatActivity{
         });
 
         RecyclerView conversationList = (RecyclerView) findViewById(R.id.recylcerConversationList);
-        conversationList.setAdapter(new ConversationRecyclerViewAdapter());
+        conversationList.setAdapter(new ConversationRecyclerViewAdapter(this));
         conversationList.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -78,5 +78,12 @@ public class InboxActivity extends AppCompatActivity{
 
             // Pass the conversation object to the chat activity
         }
+    }
+
+    @Override
+    public void displayConversation(String conversationId) {
+        Intent intent = new Intent(this,ChatActivity.class);
+        intent.putExtra("conversationId",conversationId);
+        startActivity(intent);
     }
 }
