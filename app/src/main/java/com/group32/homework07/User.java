@@ -5,12 +5,12 @@ public class User {
     private String lastName;
     private String uid;
     private String email;
-    private String gender;
+    private Boolean gender;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String uid, String email, String gender) {
+    public User(String firstName, String lastName, String uid, String email, Boolean gender) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.uid = uid;
@@ -50,11 +50,15 @@ public class User {
         this.email = email;
     }
 
-    public String getGender() {
+    public Boolean getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Boolean gender) {
         this.gender = gender;
+    }
+
+    public String fullName(){
+        return firstName + " " + lastName;
     }
 }

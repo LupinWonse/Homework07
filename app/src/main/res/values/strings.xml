@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Homework07</string>
     <string name="google_web_client_ID">588080469714-lqrflv0bknhnvgr8l25p6nhmovoc4uig.apps.googleusercontent.com</string>
+    <string name="buttonSave">Save</string>
+    <string name="buttonCancel">Cancel</string>
+    <string name="buttonLogin">Login</string>
 </resources>

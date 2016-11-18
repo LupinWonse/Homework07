@@ -9,7 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class ChatActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private FirebaseDatabase mDatabase:
+    private FirebaseDatabase mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,5 @@ public class ChatActivity extends AppCompatActivity {
         newMessage.setSenderUserUid(mAuth.getCurrentUser().getUid());
         newMessage.setToUserUid("testToUserUid");
 
-        mDatabase.getReference("messages").child()
     }
 }

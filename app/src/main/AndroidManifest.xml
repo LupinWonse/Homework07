@@ -15,7 +15,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".ChatActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".InboxActivity" />
+        <activity android:name=".ContactsActivity"></activity>
     </application>
 
 </manifest>

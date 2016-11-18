@@ -5,6 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -23,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     private final static int REQUEST_GOOGLE_SIGNIN = 1;
 
+    private Button buttonLogin;
+
     private FirebaseAuth mAuth;
     private GoogleApiClient mGoogleApiClient;
 
@@ -30,6 +35,14 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Setup UI elements
+        buttonLogin = (Button) findViewById(R.id.buttonMainLogin);
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginWithEmail();
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
         mAuth.addAuthStateListener(this);
@@ -47,7 +60,27 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        signInWithGoogle();
+    }
+
+    private void loginWithEmail() {
+        EditText editEmail = (EditText) findViewById(R.id.editMainEmail);
+        EditText editPassword = (EditText) findViewById(R.id.editMainPassword);
+
+        if(editEmail.getText().toString().length() == 0){
+            editEmail.setError("Please provide your e-mail");
+            return;
+        }
+        if(editPassword.getText().toString().length() == 0){
+            editPassword.setError("Please provide your password");
+            return;
+        }
+
+        String email = ((EditText) findViewById(R.id.editMainEmail)).getText().toString();
+        String password = ((EditText) findViewById(R.id.editMainPassword)).getText().toString();
+
+        mAuth.signInWithEmailAndPassword(email,password);
+        //TODO On failure event handling
+
     }
 
     private void signInWithGoogle() {
@@ -92,7 +125,15 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         if (firebaseAuth.getCurrentUser() != null){
-            Toast.makeText(this,"User Logged In :" + firebaseAuth.getCurrentUser().getUid(),Toast.LENGTH_SHORT).show();
+            Log.d("test",firebaseAuth.getCurrentUser().getEmail());
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        mAuth.removeAuthStateListener(this);
+        super.onStop();
     }
 }
