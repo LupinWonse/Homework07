@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     private final static int REQUEST_GOOGLE_SIGNIN = 1;
 
-    private Button buttonLogin;
+    private Button buttonLogin, buttonSignup;
 
     private FirebaseAuth mAuth;
     private GoogleApiClient mGoogleApiClient;
@@ -45,6 +45,15 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
             @Override
             public void onClick(View v) {
                 loginWithEmail();
+            }
+        });
+
+        buttonSignup = (Button) findViewById(R.id.buttonMainSignup);
+        buttonSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,SignupActivity.class);
+                startActivity(intent);
             }
         });
 

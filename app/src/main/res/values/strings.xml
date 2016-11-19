@@ -5,4 +5,12 @@
     <string name="buttonCancel">Cancel</string>
     <string name="buttonLogin">Login</string>
     <string name="hintMessageText">Say something</string>
+    <string name="hintEmail">Email</string>
+    <string name="hintPassword">Password</string>
+    <string name="hintRepeat">One more time</string>
+    <string name="hintFirstname">Firstname</string>
+    <string name="hintLastname">Lastname</string>
+    <string name="labelGender">Gender</string>
+    <string name="buttonSignUp">Sign Up</string>
+    <string name="buttonSignout">Log Out User</string>
 </resources>

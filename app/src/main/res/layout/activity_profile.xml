@@ -70,4 +70,13 @@
         android:layout_toEndOf="@+id/imageProfilePicture"
         android:id="@+id/buttonProfileCancel" />
 
+    <Button
+        android:text="@string/buttonSignout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/buttonProfileSignOut"
+        />
+
 </RelativeLayout>

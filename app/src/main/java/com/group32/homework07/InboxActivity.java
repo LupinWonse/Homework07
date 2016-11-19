@@ -81,9 +81,10 @@ public class InboxActivity extends AppCompatActivity implements ConversationRecy
     }
 
     @Override
-    public void displayConversation(String conversationId) {
+    public void displayConversation(String conversationId, String toUser) {
         Intent intent = new Intent(this,ChatActivity.class);
         intent.putExtra("conversationId",conversationId);
+        intent.putExtra("toUser",toUser);
         startActivity(intent);
     }
 }

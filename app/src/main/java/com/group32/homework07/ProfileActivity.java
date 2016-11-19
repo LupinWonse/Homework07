@@ -26,7 +26,7 @@ public class ProfileActivity extends AppCompatActivity{
     private EditText editLastname;
     private Switch switchGender;
 
-    private Button buttonSave, buttonCancel;
+    private Button buttonSave, buttonCancel, buttonLogout;
 
     private User currentUser;
 
@@ -41,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity{
         switchGender = (Switch) findViewById(R.id.editProfileSwitch);
         buttonSave = (Button) findViewById(R.id.buttonProfileSave);
         buttonCancel = (Button) findViewById(R.id.buttonProfileCancel);
+        buttonLogout = (Button) findViewById(R.id.buttonProfileSignOut);
 
         mAuth = FirebaseAuth.getInstance();
         //mAuth.addAuthStateListener(this);
@@ -79,6 +80,12 @@ public class ProfileActivity extends AppCompatActivity{
                 saveUser();
             }
         });
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signOut();
+            }
+        });
     }
 
 
@@ -114,5 +121,10 @@ public class ProfileActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+    }
+
+    private void signOut(){
+        mAuth.signOut();
+        finish();
     }
 }

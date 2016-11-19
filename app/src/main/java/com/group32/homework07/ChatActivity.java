@@ -17,10 +17,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity {
 
     private String conversationId;
+    private String toUser;
 
     private ArrayList<Message> messageList;
     private FirebaseAuth mAuth;
@@ -37,13 +39,14 @@ public class ChatActivity extends AppCompatActivity {
         messageList = new ArrayList<>();
 
         conversationId = getIntent().getStringExtra("conversationId");
-        Toast.makeText(this,conversationId,Toast.LENGTH_SHORT).show();
+        toUser = getIntent().getStringExtra("toUser");
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         messagesDatabase = mDatabase.getReference(mAuth.getCurrentUser().getUid())
                 .child(conversationId)
                 .child("messages");
+
         messagesDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -96,12 +99,13 @@ public class ChatActivity extends AppCompatActivity {
         final Message newMessage = new Message();
         newMessage.setMessageText(messageText);
         newMessage.setSenderUserUid(mAuth.getCurrentUser().getUid());
-        newMessage.setToUserUid("testToUserUid");
 
-        messagesDatabase.push().setValue(newMessage);
+        FirebaseDatabase.getInstance().getReference(mAuth.getCurrentUser().getUid()).child(conversationId).child("messages").push().setValue(newMessage);
 
-
-
+        FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("messages").push().setValue(newMessage);
+        FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("withUser").setValue(mAuth.getCurrentUser().getUid());
+        FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("conversationId").setValue(conversationId);
+        FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("lastMessageDate").setValue(new Date());
 
     }
 }

@@ -93,7 +93,7 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                conversationListHandler.displayConversation(currentConversation.getConversationId());
+                conversationListHandler.displayConversation(currentConversation.getConversationId(), currentConversation.getWithUser());
             }
         });
     }
@@ -104,6 +104,6 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
     }
 
     interface IConversationListHandler{
-        void displayConversation(String conversationId);
+        void displayConversation(String conversationId, String toUserId);
     }
 }
