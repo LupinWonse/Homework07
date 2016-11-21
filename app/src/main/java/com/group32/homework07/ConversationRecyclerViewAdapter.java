@@ -21,6 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
 import java.util.ArrayList;
 
 public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<ConversationRecyclerViewAdapter.ViewHolder> {
@@ -67,13 +69,11 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView textMessage, textSender, textTime;
+        private TextView textSender, textTime;
         private ImageView imagePicture, imageNew;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            textMessage = (TextView) itemView.findViewById(R.id.textConversationMessage);
             textSender = (TextView) itemView.findViewById(R.id.textConversationSender);
             textTime = (TextView) itemView.findViewById(R.id.textConversationTime);
             imagePicture = (ImageView) itemView.findViewById(R.id.imageConversationPicture);
@@ -91,14 +91,9 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Conversation currentConversation = conversationList.get(position);
 
-        if (currentConversation.getMessages().size()>0) {
-            //holder.textMessage.setText(currentConversation.getMessages().get(0).getMessageText());
-        } else {
-            holder.textMessage.setText("No messages in this conversation");
-        }
-
         holder.textSender.setText(currentConversation.getWithUser());
-        holder.textTime.setText(currentConversation.getLastMessageDate().toString());
+        PrettyTime pt = new PrettyTime();
+        holder.textTime.setText(pt.format(currentConversation.getLastMessageDate()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

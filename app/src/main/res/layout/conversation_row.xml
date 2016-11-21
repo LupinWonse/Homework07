@@ -23,25 +23,6 @@
         android:layout_toEndOf="@+id/imageConversationPicture"
         android:id="@+id/textConversationTime" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textConversationMessage"
-        android:layout_below="@+id/textConversationSender"
-        android:layout_toRightOf="@+id/imageConversationPicture"
-        android:layout_toEndOf="@+id/imageConversationPicture" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/btn_star_big_on"
-        android:id="@+id/imageConversationNew"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp" />
-
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -50,5 +31,17 @@
         android:scaleType="fitXY"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginRight="@dimen/activity_horizontal_margin" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        android:id="@+id/imageConversationNew"
+        android:layout_marginRight="15dp"
+        android:layout_below="@+id/textConversationSender"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp" />
 </RelativeLayout>

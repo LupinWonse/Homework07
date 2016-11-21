@@ -61,6 +61,10 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
             holder.textSender.setGravity(Gravity.RIGHT);
             holder.textMessageText.setGravity(Gravity.RIGHT);
             holder.textTime.setGravity(Gravity.RIGHT);
+        } else {
+            holder.textSender.setGravity(Gravity.LEFT);
+            holder.textMessageText.setGravity(Gravity.LEFT);
+            holder.textTime.setGravity(Gravity.LEFT);
         }
 
         // Instead we should try to get the user name from the database
