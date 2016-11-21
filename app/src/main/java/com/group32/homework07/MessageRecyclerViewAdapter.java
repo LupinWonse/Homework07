@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 
@@ -47,6 +50,13 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
 
         holder.textSender.setText(currentMessage.getSenderUserUid());
         holder.textMessageText.setText(currentMessage.getMessageText());
+
+        if (currentMessage.getMessageImageUrl() != null){
+            Picasso.with(holder.itemView.getContext()).load(currentMessage.getMessageImageUrl()).into(holder.imageMessagePhoto);
+            holder.imageMessagePhoto.setVisibility(View.VISIBLE);
+        } else {
+            holder.imageMessagePhoto.setVisibility(View.GONE);
+        }
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
