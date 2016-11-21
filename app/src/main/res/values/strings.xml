@@ -14,4 +14,6 @@
     <string name="buttonSignUp">Sign Up</string>
     <string name="buttonSignout">Log Out User</string>
     <string name="menuProfile">Profile </string>
+    <string name="genderMale">Male</string>
+    <string name="genderFemale">Female</string>
 </resources>

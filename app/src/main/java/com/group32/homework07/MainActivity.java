@@ -1,6 +1,6 @@
 // DONE Contact selector showing profile pictures
-// TODO Sizing of profile pictures (contacts + profile)
-// DONE New messages showing star
+// DONE Sizing of profile pictures (contacts + profile)
+// TODO New messages showing star
 // DONE Delete message
 // DONE Delete conversation
 // DONE Post picture
@@ -14,6 +14,7 @@
 // DONE Conversations not showing correct sender information
 // DONE Conversations not showing profile pictures
 // DONE Contacts activity should not show current user
+// DONE Fix the layout for Profile Activity
 
 package com.group32.homework07;
 
