@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class InboxActivity extends AppCompatActivity implements ConversationRecyclerViewAdapter.IConversationListHandler{
 
     public static int CHOOSE_CONTACT_REQUEST_CODE = 1;
+    public static int CHOOSE_CONTACT_SUCCESS_RESULT_CODE = 1;
 
     private FirebaseAuth mAuth;
     private User currentUser;
@@ -88,7 +89,7 @@ public class InboxActivity extends AppCompatActivity implements ConversationRecy
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CHOOSE_CONTACT_REQUEST_CODE) {
+        if (requestCode == CHOOSE_CONTACT_REQUEST_CODE && resultCode == CHOOSE_CONTACT_SUCCESS_RESULT_CODE) {
             String uid = data.getStringExtra("uid");
 
             // Create empty conversation and add this to the database

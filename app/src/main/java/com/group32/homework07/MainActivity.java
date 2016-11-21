@@ -7,14 +7,13 @@
 // DONE Show images on conversation
 // DONE Conversation visualize which is sent and which is recieeved
 // DONE Conversation not showing message
-// TODO Bugfix going back from contact list crashing
+// DONE Bugfix going back from contact list crashing
 // DONE Go To Profile view action
 // DONE Cancel does not work on profile page
 // DONe Messages not showing correct sender information
 // DONE Conversations not showing correct sender information
 // DONE Conversations not showing profile pictures
-
-// TODO Contacts activity should not show current user
+// DONE Contacts activity should not show current user
 
 package com.group32.homework07;
 
