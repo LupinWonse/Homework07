@@ -2,6 +2,7 @@ package com.group32.homework07;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
 
         private TextView textSender;
         private TextView textMessageText;
+        private TextView textTime;
         private ImageView imageMessagePhoto;
 
         public ViewHolder(View itemView) {
@@ -40,6 +42,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
             textSender = (TextView) itemView.findViewById(R.id.textMessageSender);
             textMessageText = (TextView) itemView.findViewById(R.id.textMessageMessage);
             imageMessagePhoto = (ImageView) itemView.findViewById(R.id.imageMessagePhoto);
+            textTime = (TextView) itemView.findViewById(R.id.textMessageTime);
         }
     }
 
@@ -52,6 +55,13 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Message currentMessage = messages.get(position);
+
+        // If this message is a SENT message we have to adapt the view
+        if (currentMessage.getSenderUserUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            holder.textSender.setGravity(Gravity.RIGHT);
+            holder.textMessageText.setGravity(Gravity.RIGHT);
+            holder.textTime.setGravity(Gravity.RIGHT);
+        }
 
         // Instead we should try to get the user name from the database
         FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -67,6 +77,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
         });
 
         holder.textMessageText.setText(currentMessage.getMessageText());
+        holder.textTime.setText(currentMessage.getPrettyTime());
 
         if (currentMessage.getMessageImageUrl() != null){
             Picasso.with(holder.itemView.getContext()).load(currentMessage.getMessageImageUrl()).into(holder.imageMessagePhoto);

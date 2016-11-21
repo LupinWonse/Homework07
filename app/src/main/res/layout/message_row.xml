@@ -8,7 +8,8 @@
         android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textMessageSender" />
+        android:id="@+id/textMessageSender"
+        android:textStyle="normal|bold" />
 
     <TextView
         android:text="TextView"
@@ -21,4 +22,11 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_camera"
         android:id="@+id/imageMessagePhoto" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textMessageTime"
+        android:textSize="10sp" />
 </LinearLayout>

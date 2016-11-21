@@ -5,8 +5,8 @@
 // DONE Delete conversation
 // DONE Post picture
 // DONE Show images on conversation
-// TODO Conversation visualize which is sent and which is recieeved
-// TODO Conversation not showing message
+// DONE Conversation visualize which is sent and which is recieeved
+// DONE Conversation not showing message
 // TODO Bugfix going back from contact list crashing
 // DONE Go To Profile view action
 // DONE Cancel does not work on profile page
