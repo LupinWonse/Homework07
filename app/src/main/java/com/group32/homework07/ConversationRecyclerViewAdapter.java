@@ -1,5 +1,7 @@
 package com.group32.homework07;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,7 +81,7 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final Conversation currentConversation = conversationList.get(position);
         if (currentConversation.getMessages().size()>0) {
             //holder.textMessage.setText(currentConversation.getMessages().get(0).getMessageText());
@@ -94,6 +96,22 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
             @Override
             public void onClick(View v) {
                 conversationListHandler.displayConversation(currentConversation.getConversationId(), currentConversation.getWithUser());
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        userDatabase.child(currentConversation.getConversationId()).setValue(null);
+                    }
+                });
+                builder.show();
+                return true;
             }
         });
     }
