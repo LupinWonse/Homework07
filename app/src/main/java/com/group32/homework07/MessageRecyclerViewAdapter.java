@@ -64,7 +64,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
         }
 
         // Instead we should try to get the user name from the database
-        FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("users").child(currentMessage.getSenderUserUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 holder.textSender.setText(dataSnapshot.child("firstName").getValue(String.class) + dataSnapshot.child("lastName").getValue(String.class));

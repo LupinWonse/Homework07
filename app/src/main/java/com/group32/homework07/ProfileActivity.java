@@ -123,7 +123,7 @@ public class ProfileActivity extends AppCompatActivity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == USER_PROFILE_REQUEST_CODE){
+        if (requestCode == USER_PROFILE_REQUEST_CODE && resultCode == RESULT_OK){
             try {
                 InputStream profilePictureInputStream = this.getContentResolver().openInputStream(data.getData());
                 StorageReference profilePictureReference = FirebaseStorage.getInstance().getReference("profilePictures").child(mAuth.getCurrentUser().getUid());

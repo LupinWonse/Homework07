@@ -43,7 +43,8 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                conversationList.set(conversationList.indexOf(dataSnapshot.getValue(Conversation.class)),dataSnapshot.getValue(Conversation.class));
+                notifyDataSetChanged();
             }
 
             @Override
@@ -105,6 +106,12 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
                 conversationListHandler.displayConversation(currentConversation.getConversationId(), currentConversation.getWithUser());
             }
         });
+
+        if (currentConversation.getHasNewMessages()){
+            holder.imageNew.setVisibility(View.VISIBLE);
+        } else {
+            holder.imageNew.setVisibility(View.GONE);
+        }
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

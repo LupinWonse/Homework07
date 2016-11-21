@@ -2,14 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/imageConversationPicture"
-        android:scaleType="fitXY" />
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/activity_vertical_margin">
 
     <TextView
         android:text="TextView"
@@ -47,4 +41,14 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:id="@+id/imageConversationPicture"
+        android:scaleType="fitXY"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

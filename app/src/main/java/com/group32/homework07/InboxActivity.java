@@ -3,6 +3,7 @@ package com.group32.homework07;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -52,6 +53,15 @@ public class InboxActivity extends AppCompatActivity implements ConversationRecy
         setContentView(R.layout.activity_inbox);
 
         mAuth = FirebaseAuth.getInstance();
+        // Check if the user was somehow logged out if so close the activity
+        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() == null){
+                    finish();
+                }
+            }
+        });
 
         if(mAuth.getCurrentUser() != null){
             FirebaseDatabase.getInstance().getReference("users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {

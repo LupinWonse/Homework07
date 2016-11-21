@@ -1,6 +1,6 @@
 // DONE Contact selector showing profile pictures
 // DONE Sizing of profile pictures (contacts + profile)
-// TODO New messages showing star
+// DONE New messages showing star
 // DONE Delete message
 // DONE Delete conversation
 // DONE Post picture
@@ -15,6 +15,8 @@
 // DONE Conversations not showing profile pictures
 // DONE Contacts activity should not show current user
 // DONE Fix the layout for Profile Activity
+
+// DONE Bugfix going back from profile photo selection crashes
 
 package com.group32.homework07;
 
@@ -34,6 +36,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -115,8 +118,12 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         String email = ((EditText) findViewById(R.id.editMainEmail)).getText().toString();
         String password = ((EditText) findViewById(R.id.editMainPassword)).getText().toString();
 
-        mAuth.signInWithEmailAndPassword(email,password);
-        //TODO On failure event handling
+        mAuth.signInWithEmailAndPassword(email,password).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -180,8 +187,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
                 }
             });
-            Intent intent = new Intent(this, ProfileActivity.class);
-            startActivity(intent);
         }
     }
 
