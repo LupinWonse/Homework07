@@ -1,9 +1,11 @@
 // DONE Contact selector showing profile pictures
 // TODO Sizing of profile pictures (contacts + profile)
 // TODO New messages showing star
-// TODO Delete message
+// DONE Delete message
 // TODO Delete conversation
-// TODO Post picture
+// DONE Post picture
+// TODO Show images on conversation
+// TODO Conversation visualize which is sent and which is recieved
 // TODO Bugfix going back from contact list crashing
 // TODO Go To Profile view action
 

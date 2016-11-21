@@ -1,5 +1,6 @@
 package com.group32.homework07;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -15,11 +17,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity implements MessageRecyclerViewAdapter.IMessageListHandler{
+
+    public static final int MESSAGE_PHOTO_REQUEST_CODE = 10;
 
     private String conversationId;
     private String toUser;
@@ -87,6 +95,13 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerVi
                 sendMessage();
             }
         });
+
+        findViewById(R.id.imageButtonChatPhoto).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendPicture();
+            }
+        });
     }
 
     private void sendMessage(){
@@ -116,6 +131,56 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerVi
         FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("conversationId").setValue(conversationId);
         FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("lastMessageDate").setValue(new Date());
 
+    }
+
+    private void sendPicture(){
+        Intent getPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getPhotoIntent.setType("image/*");
+        startActivityForResult(getPhotoIntent,MESSAGE_PHOTO_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == MESSAGE_PHOTO_REQUEST_CODE){
+
+            final String messageId = messagesDatabase.push().getKey();
+
+
+            // Upload the photo to the firebase storage
+            InputStream photoInputStream = null;
+            try {
+                photoInputStream = getContentResolver().openInputStream(data.getData());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            FirebaseStorage.getInstance().getReference(mAuth.getCurrentUser().getUid()).child(messageId).putStream(photoInputStream).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // Construct the message to be sent
+                    final Message newMessage = new Message();
+                    newMessage.setMessageText(null);
+                    newMessage.setSenderUserUid(mAuth.getCurrentUser().getUid());
+
+                    // Add the message into the conversation for the current user
+
+                    newMessage.setMessageId(messageId);
+                    newMessage.setMessageImageUrl(taskSnapshot.getDownloadUrl().toString());
+
+                    // Add the message to the conversation for the user receiving the message
+                    String receiverMessageId = FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("messages").push().getKey();
+                    newMessage.setMessageId(receiverMessageId);
+                    messagesDatabase.child(messageId).setValue(newMessage);
+
+                    // Create the corresponding conversation to the user who receives the message in case it does not exist.
+                    FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("withUser").setValue(mAuth.getCurrentUser().getUid());
+                    FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("conversationId").setValue(conversationId);
+                    FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("lastMessageDate").setValue(new Date());
+                }
+            });
+
+
+
+        }
     }
 
     @Override
