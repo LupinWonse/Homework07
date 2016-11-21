@@ -1,3 +1,12 @@
+// DONE Contact selector showing profile pictures
+// TODO Sizing of profile pictures (contacts + profile)
+// TODO New messages showing star
+// TODO Delete message
+// TODO Delete conversation
+// TODO Post picture
+// TODO Bugfix going back from contact list crashing
+// TODO Go To Profile view action
+
 package com.group32.homework07;
 
 import android.content.Intent;
