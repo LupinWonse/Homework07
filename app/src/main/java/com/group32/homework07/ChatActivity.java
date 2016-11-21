@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements MessageRecyclerViewAdapter.IMessageListHandler{
 
     private String conversationId;
     private String toUser;
@@ -61,7 +61,8 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                messageList.remove(dataSnapshot.getValue(Message.class));
+                recyclerViewMessages.getAdapter().notifyDataSetChanged();
             }
 
             @Override
@@ -77,7 +78,7 @@ public class ChatActivity extends AppCompatActivity {
 
         // Setup recyclerView
         recyclerViewMessages = (RecyclerView) findViewById(R.id.recyclerMessageList);
-        recyclerViewMessages.setAdapter(new MessageRecyclerViewAdapter(messageList));
+        recyclerViewMessages.setAdapter(new MessageRecyclerViewAdapter(messageList,this));
         recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
 
         findViewById(R.id.imageButtonChatSend).setOnClickListener(new View.OnClickListener() {
@@ -100,12 +101,26 @@ public class ChatActivity extends AppCompatActivity {
         newMessage.setMessageText(messageText);
         newMessage.setSenderUserUid(mAuth.getCurrentUser().getUid());
 
-        FirebaseDatabase.getInstance().getReference(mAuth.getCurrentUser().getUid()).child(conversationId).child("messages").push().setValue(newMessage);
+        // Add the message into the conversation for the current user
+        String messageId = messagesDatabase.push().getKey();
+        newMessage.setMessageId(messageId);
+        messagesDatabase.child(messageId).setValue(newMessage);
 
-        FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("messages").push().setValue(newMessage);
+        // Add the message to the conversation for the user receiving the message
+        String receiverMessageId = FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("messages").push().getKey();
+        newMessage.setMessageId(receiverMessageId);
+        FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("messages").child(receiverMessageId).setValue(newMessage);
+
+        // Create the corresponding conversation to the user who receives the message in case it does not exist.
         FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("withUser").setValue(mAuth.getCurrentUser().getUid());
         FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("conversationId").setValue(conversationId);
         FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("lastMessageDate").setValue(new Date());
 
+    }
+
+    @Override
+    public void deleteMessage(String messageId) {
+        // Delete the message ONLY on the users end
+        messagesDatabase.child(messageId).setValue(null);
     }
 }

@@ -1,6 +1,7 @@
 package com.group32.homework07;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,11 @@ import java.util.ArrayList;
 public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<Message> messages;
+    private IMessageListHandler handler;
 
-    public MessageRecyclerViewAdapter(ArrayList<Message> messages) {
+    public MessageRecyclerViewAdapter(ArrayList<Message> messages, IMessageListHandler handler) {
         this.messages = messages;
+        this.handler = handler;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
@@ -39,16 +42,30 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Message currentMessage = messages.get(position);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Message currentMessage = messages.get(position);
 
         holder.textSender.setText(currentMessage.getSenderUserUid());
         holder.textMessageText.setText(currentMessage.getMessageText());
 
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                handler.deleteMessage(currentMessage.getMessageId());
+                return true;
+            }
+        });
+
     }
+
+
 
     @Override
     public int getItemCount() {
         return messages.size();
+    }
+
+    interface IMessageListHandler{
+        void deleteMessage (String messageId);
     }
 }
