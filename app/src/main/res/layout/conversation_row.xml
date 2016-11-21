@@ -5,10 +5,11 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/imageConversationPicture" />
+        android:id="@+id/imageConversationPicture"
+        android:scaleType="fitXY" />
 
     <TextView
         android:text="TextView"
@@ -30,19 +31,20 @@
 
     <TextView
         android:text="TextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/textConversationSender"
         android:id="@+id/textConversationMessage"
-        android:layout_alignBottom="@+id/textConversationTime"
-        android:layout_alignParentTop="true" />
+        android:layout_below="@+id/textConversationSender"
+        android:layout_toRightOf="@+id/imageConversationPicture"
+        android:layout_toEndOf="@+id/imageConversationPicture" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/btn_star_big_on"
         android:id="@+id/imageConversationNew"
-        android:layout_below="@+id/textConversationSender"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="8dp" />
 </RelativeLayout>

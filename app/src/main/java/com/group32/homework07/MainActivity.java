@@ -1,13 +1,13 @@
 // DONE Contact selector showing profile pictures
 // TODO Sizing of profile pictures (contacts + profile)
-// TODO New messages showing star
+// DONE New messages showing star
 // DONE Delete message
 // DONE Delete conversation
 // DONE Post picture
 // DONE Show images on conversation
 // DONE Conversation visualize which is sent and which is recieeved
 // DONE Conversation not showing message
-// TODO Bugfix going back from contact list crashing
+// DONE Bugfix going back from contact list crashing
 // DONE Go To Profile view action
 // DONE Cancel does not work on profile page
 // DONe Messages not showing correct sender information
