@@ -13,4 +13,5 @@
     <string name="labelGender">Gender</string>
     <string name="buttonSignUp">Sign Up</string>
     <string name="buttonSignout">Log Out User</string>
+    <string name="menuProfile">Profile </string>
 </resources>

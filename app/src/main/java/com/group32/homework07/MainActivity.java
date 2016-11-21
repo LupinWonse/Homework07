@@ -2,12 +2,13 @@
 // TODO Sizing of profile pictures (contacts + profile)
 // TODO New messages showing star
 // DONE Delete message
-// TODO Delete conversation
+// DONE Delete conversation
 // DONE Post picture
 // TODO Show images on conversation
 // TODO Conversation visualize which is sent and which is recieved
 // TODO Bugfix going back from contact list crashing
-// TODO Go To Profile view action
+// DONE Go To Profile view action
+// TODO Cancel does not work on profile page
 
 package com.group32.homework07;
 

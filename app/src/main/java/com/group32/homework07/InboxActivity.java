@@ -3,10 +3,14 @@ package com.group32.homework07;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +28,22 @@ public class InboxActivity extends AppCompatActivity implements ConversationRecy
     private FirebaseAuth mAuth;
     private User currentUser;
     private ArrayList<Conversation> conversations;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menuProfile:
+                Intent intent = new Intent(this,ProfileActivity.class);
+                startActivity(intent);
+        }
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +68,8 @@ public class InboxActivity extends AppCompatActivity implements ConversationRecy
         }
 
 
+
+
         findViewById(R.id.imageButtonInboxAdd).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +81,9 @@ public class InboxActivity extends AppCompatActivity implements ConversationRecy
         RecyclerView conversationList = (RecyclerView) findViewById(R.id.recylcerConversationList);
         conversationList.setAdapter(new ConversationRecyclerViewAdapter(this));
         conversationList.setLayoutManager(new LinearLayoutManager(this));
+
+        // Setup the action bar
+        ActionBar actionBar = getSupportActionBar();
     }
 
     @Override
