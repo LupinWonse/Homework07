@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,8 +37,12 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         FirebaseDatabase.getInstance().getReference("users").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                userList.add(dataSnapshot.getValue(User.class));
-                ContactsRecyclerViewAdapter.this.notifyDataSetChanged();
+                User newUser  = dataSnapshot.getValue(User.class);
+
+                if(!newUser.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                    userList.add(newUser);
+                    ContactsRecyclerViewAdapter.this.notifyDataSetChanged();
+                }
             }
 
             @Override
