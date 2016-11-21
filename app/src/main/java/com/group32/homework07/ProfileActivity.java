@@ -95,6 +95,12 @@ public class ProfileActivity extends AppCompatActivity{
                 saveUser();
             }
         });
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

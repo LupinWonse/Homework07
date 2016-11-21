@@ -2,6 +2,7 @@ package com.group32.homework07;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +10,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -22,12 +27,13 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
 
     private ArrayList<Conversation> conversationList;
     private IConversationListHandler conversationListHandler;
+    private DatabaseReference userDatabase;
 
     public ConversationRecyclerViewAdapter(IConversationListHandler handler) {
         this.conversationListHandler = handler;
         conversationList = new ArrayList<>();
 
-        DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        userDatabase = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
         userDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -83,6 +89,7 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Conversation currentConversation = conversationList.get(position);
+
         if (currentConversation.getMessages().size()>0) {
             //holder.textMessage.setText(currentConversation.getMessages().get(0).getMessageText());
         } else {
@@ -114,6 +121,25 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
                 return true;
             }
         });
+
+        FirebaseStorage.getInstance().getReference("profilePictures").child(currentConversation.getWithUser()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.with(holder.itemView.getContext()).load(uri).into(holder.imagePicture);
+            }
+        });
+        FirebaseDatabase.getInstance().getReference("users").child(currentConversation.getWithUser()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                holder.textSender.setText(dataSnapshot.child("firstName").getValue(String.class) + " " + dataSnapshot.child("lastName").getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override

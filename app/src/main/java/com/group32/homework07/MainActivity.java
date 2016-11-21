@@ -6,12 +6,13 @@
 // DONE Post picture
 // DONE Show images on conversation
 // TODO Conversation visualize which is sent and which is recieeved
+// TODO Conversation not showing message
 // TODO Bugfix going back from contact list crashing
 // DONE Go To Profile view action
-// TODO Cancel does not work on profile page
-// TODO Messages not showing correct sender information
-// TODO Conversations not showing correct sender information
-// TODO Conversations not showing profile pictures
+// DONE Cancel does not work on profile page
+// DONe Messages not showing correct sender information
+// DONE Conversations not showing correct sender information
+// DONE Conversations not showing profile pictures
 
 package com.group32.homework07;
 

@@ -8,6 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -48,7 +53,19 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Message currentMessage = messages.get(position);
 
-        holder.textSender.setText(currentMessage.getSenderUserUid());
+        // Instead we should try to get the user name from the database
+        FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                holder.textSender.setText(dataSnapshot.child("firstName").getValue(String.class) + dataSnapshot.child("lastName").getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         holder.textMessageText.setText(currentMessage.getMessageText());
 
         if (currentMessage.getMessageImageUrl() != null){
