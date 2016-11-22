@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -8,7 +9,8 @@
         android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textMessageSender" />
+        android:id="@+id/textMessageSender"
+        android:textStyle="normal|bold" />
 
     <TextView
         android:text="TextView"
@@ -20,5 +22,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_camera"
-        android:id="@+id/imageMessagePhoto" />
+        android:id="@+id/imageMessagePhoto"
+        android:maxWidth="@android:dimen/thumbnail_width" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textMessageTime"
+        android:textSize="10sp" />
 </LinearLayout>

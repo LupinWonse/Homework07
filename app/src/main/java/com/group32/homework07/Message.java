@@ -1,5 +1,7 @@
 package com.group32.homework07;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
 import java.util.Date;
 
 public class Message {
@@ -7,16 +9,19 @@ public class Message {
     private String toUserUid;
     private String messageText;
     private String messageImageUrl;
+    private String messageId;
     private Date messageSentDate;
 
     public Message() {
+        this.setMessageSentDate(new Date());
     }
 
-    public Message(String senderUserUid, String toUserUid, String messageText, String messageImageUrl, Date messageSentDate) {
+    public Message(String senderUserUid, String toUserUid, String messageText, String messageImageUrl, String messageId, Date messageSentDate) {
         this.senderUserUid = senderUserUid;
         this.toUserUid = toUserUid;
         this.messageText = messageText;
         this.messageImageUrl = messageImageUrl;
+        this.messageId = messageId;
         this.messageSentDate = messageSentDate;
     }
 
@@ -58,5 +63,27 @@ public class Message {
 
     public void setMessageSentDate(Date messageSentDate) {
         this.messageSentDate = messageSentDate;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o.getClass().equals(Message.class)){
+            return this.messageId.equals(((Message) o).getMessageId());
+        }
+
+        return super.equals(o);
+    }
+
+    public String getPrettyTime(){
+        PrettyTime pt = new PrettyTime();
+        return pt.format(this.messageSentDate);
     }
 }

@@ -1,6 +1,9 @@
 package com.group32.homework07;
 
 public class User {
+
+    public static final String STORAGE_PROFILE_PICTURES_REFERENCE = "profilePictures";
+
     private String firstName;
     private String lastName;
     private String uid;

@@ -9,6 +9,7 @@ public class Conversation {
     private String conversationId;
     private String withUser;
     private Date lastMessageDate;
+    private Boolean hasNewMessages;
     private HashMap<String,Message> messages;
 
     public Conversation() {
@@ -20,6 +21,15 @@ public class Conversation {
         this.lastMessageDate = new Date();
         this.messages = new HashMap<>();
         this.conversationId = conversationId;
+        this.hasNewMessages = false;
+    }
+
+    public Boolean getHasNewMessages() {
+        return hasNewMessages;
+    }
+
+    public void setHasNewMessages(Boolean hasNewMessages) {
+        this.hasNewMessages = hasNewMessages;
     }
 
     public String getConversationId() {

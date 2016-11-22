@@ -9,66 +9,36 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.group32.homework07.ProfileActivity">
+    tools:context="com.group32.homework07.ProfileActivity"
+    android:layout_marginRight="14dp">
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         app:srcCompat="@mipmap/ic_launcher"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/imageProfilePicture" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:ems="10"
-        android:id="@+id/editProfileFirstname"
-        android:layout_below="@+id/imageProfilePicture"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:ems="10"
-        android:id="@+id/editProfileLastname"
-        android:layout_below="@+id/editProfileFirstname"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Switch
-        android:text="Switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editProfileSwitch"
-        android:layout_below="@+id/editProfileLastname"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:id="@+id/imageProfilePicture"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="false" />
 
     <Button
         android:text="@string/buttonSave"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/imageProfilePicture"
         android:layout_toStartOf="@+id/imageProfilePicture"
-        android:id="@+id/buttonProfileSave" />
+        android:id="@+id/buttonProfileSave"
+        android:layout_toLeftOf="@+id/imageProfilePicture" />
 
     <Button
         android:text="@string/buttonCancel"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/buttonProfileSave"
-        android:layout_toRightOf="@+id/imageProfilePicture"
         android:layout_toEndOf="@+id/imageProfilePicture"
-        android:id="@+id/buttonProfileCancel" />
+        android:id="@+id/buttonProfileCancel"
+        android:layout_toRightOf="@+id/imageProfilePicture" />
 
     <Button
         android:text="@string/buttonSignout"
@@ -78,5 +48,59 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/buttonProfileSignOut"
         />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editProfileLastname"
+        android:layout_below="@+id/editProfileFirstname"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="@string/hintLastname" />
+
+    <TextView
+        android:text="@string/genderFemale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_alignBaseline="@+id/editProfileSwitch"
+        android:layout_alignBottom="@+id/editProfileSwitch"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="14dp" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editProfileSwitch"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/editProfileLastname"
+        android:layout_toLeftOf="@+id/textView2"
+        android:layout_toStartOf="@+id/textView2"
+        android:layout_marginRight="14dp" />
+
+    <TextView
+        android:text="@string/genderMale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_alignBaseline="@+id/editProfileSwitch"
+        android:layout_alignBottom="@+id/editProfileSwitch"
+        android:layout_toLeftOf="@+id/editProfileSwitch"
+        android:layout_toStartOf="@+id/editProfileSwitch"
+        android:layout_marginRight="14dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editProfileFirstname"
+        android:layout_below="@+id/imageProfilePicture"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="@string/hintFirstname" />
 
 </RelativeLayout>

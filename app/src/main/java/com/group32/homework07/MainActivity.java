@@ -1,3 +1,23 @@
+// DONE Contact selector showing profile pictures
+// DONE Sizing of profile pictures (contacts + profile)
+// DONE New messages showing star
+// DONE Delete message
+// DONE Delete conversation
+// DONE Post picture
+// DONE Show images on conversation
+// DONE Conversation visualize which is sent and which is recieeved
+// DONE Conversation not showing message
+// DONE Bugfix going back from contact list crashing
+// DONE Go To Profile view action
+// DONE Cancel does not work on profile page
+// DONe Messages not showing correct sender information
+// DONE Conversations not showing correct sender information
+// DONE Conversations not showing profile pictures
+// DONE Contacts activity should not show current user
+// DONE Fix the layout for Profile Activity
+
+// DONE Bugfix going back from profile photo selection crashes
+
 package com.group32.homework07;
 
 import android.content.Intent;
@@ -10,21 +30,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.facebook.*;
 
 public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
 
@@ -34,10 +59,12 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     private FirebaseAuth mAuth;
     private GoogleApiClient mGoogleApiClient;
+    private CallbackManager mCallbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
         // Setup UI elements
         buttonLogin = (Button) findViewById(R.id.buttonMainLogin);
@@ -73,6 +100,61 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+        findViewById(R.id.buttonLoginGoogle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signInWithGoogle();
+            }
+        });
+
+        //Initialize facebook
+        mCallbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) findViewById(R.id.buttonLoginFacebook);
+        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d("TEST", "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d("Homework7", "Facebook login cancelled");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d("Homework7", "Facebook login on Error", error);
+                Toast.makeText(MainActivity.this,error.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        //Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        //Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                           //Log.w(TAG, "signInWithCredential", task.getException());
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
     }
 
     @Override
@@ -97,8 +179,12 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         String email = ((EditText) findViewById(R.id.editMainEmail)).getText().toString();
         String password = ((EditText) findViewById(R.id.editMainPassword)).getText().toString();
 
-        mAuth.signInWithEmailAndPassword(email,password);
-        //TODO On failure event handling
+        mAuth.signInWithEmailAndPassword(email,password).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -117,7 +203,12 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
             if (result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+            } else {
+                Toast.makeText(MainActivity.this,result.getStatus().toString(),Toast.LENGTH_SHORT).show();
             }
+        } else {
+            // Facebook login
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -162,8 +253,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
                 }
             });
-            Intent intent = new Intent(this, ProfileActivity.class);
-            startActivity(intent);
         }
     }
 

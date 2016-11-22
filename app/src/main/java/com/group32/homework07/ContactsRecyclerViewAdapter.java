@@ -1,6 +1,7 @@
 package com.group32.homework07;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -31,8 +37,12 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         FirebaseDatabase.getInstance().getReference("users").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                userList.add(dataSnapshot.getValue(User.class));
-                ContactsRecyclerViewAdapter.this.notifyDataSetChanged();
+                User newUser  = dataSnapshot.getValue(User.class);
+
+                if(!newUser.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                    userList.add(newUser);
+                    ContactsRecyclerViewAdapter.this.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -76,7 +86,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         return new ViewHolder(itemView);
     }
 
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final User currentUser = userList.get(position);
         holder.textFullname.setText(currentUser.fullName());
 
@@ -84,6 +94,15 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
             @Override
             public void onClick(View v) {
                 listHandler.onContactChosen(currentUser.getUid());
+            }
+        });
+
+        // Load the profile picture
+        StorageReference profilePictureReference = FirebaseStorage.getInstance().getReference(User.STORAGE_PROFILE_PICTURES_REFERENCE).child(currentUser.getUid());
+        profilePictureReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.with(holder.itemView.getContext()).load(uri).into(holder.imagePicture);
             }
         });
     }

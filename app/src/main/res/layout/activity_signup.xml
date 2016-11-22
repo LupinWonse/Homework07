@@ -91,17 +91,6 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="6dp" />
 
-    <Switch
-        android:text="Switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/switchSignUpGender"
-        android:layout_alignBaseline="@+id/labelGender"
-        android:layout_alignBottom="@+id/labelGender"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="6dp" />
-
     <Button
         android:text="@string/buttonSignUp"
         android:layout_width="wrap_content"
@@ -119,5 +108,37 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/buttonSignUpCancel" />
+
+    <TextView
+        android:text="@string/genderFemale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_alignBaseline="@+id/switchSignUpGender"
+        android:layout_alignBottom="@+id/switchSignUpGender"
+        android:layout_alignLeft="@+id/buttonSignUpCancel"
+        android:layout_alignStart="@+id/buttonSignUpCancel"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/switchSignUpGender"
+        android:layout_alignBottom="@+id/labelGender"
+        android:layout_toLeftOf="@+id/buttonSignUpCancel"
+        android:layout_toStartOf="@+id/buttonSignUpCancel" />
+
+    <TextView
+        android:text="@string/genderMale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_alignBaseline="@+id/switchSignUpGender"
+        android:layout_alignBottom="@+id/switchSignUpGender"
+        android:layout_toLeftOf="@+id/switchSignUpGender"
+        android:layout_toStartOf="@+id/switchSignUpGender"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp" />
 
 </RelativeLayout>

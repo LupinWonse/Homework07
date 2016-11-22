@@ -22,7 +22,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsRecyc
     public void onContactChosen(String uid) {
         Intent intent = new Intent();
         intent.putExtra("uid",uid);
-        setResult(1,intent);
+        setResult(InboxActivity.CHOOSE_CONTACT_SUCCESS_RESULT_CODE,intent);
         finish();
     }
 }
