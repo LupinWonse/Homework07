@@ -5,7 +5,7 @@ android {
     buildToolsVersion "24.0.2"
     defaultConfig {
         applicationId "com.group32.homework07"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -33,6 +33,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.ocpsoft.prettytime:prettytime:4.0.0.Final'
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 }
 
 

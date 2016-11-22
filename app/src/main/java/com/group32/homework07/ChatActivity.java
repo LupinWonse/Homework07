@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,7 +15,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
 
@@ -24,6 +22,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity implements MessageRecyclerViewAdapter.IMessageListHandler{
 
@@ -96,7 +96,7 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerVi
         findViewById(R.id.imageButtonChatSend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMessage();
+                sendTextMessage();
             }
         });
 
@@ -108,7 +108,7 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerVi
         });
     }
 
-    private void sendMessage(){
+    private void sendTextMessage(){
         String messageText = ((EditText) findViewById(R.id.editChatMessageText)).getText().toString();
         // If there is no message simply ignore the click
         if (messageText.length() == 0){
@@ -116,25 +116,33 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerVi
         }
 
         // Construct the message to be sent
-        final Message newMessage = new Message();
+        Message newMessage = new Message();
         newMessage.setMessageText(messageText);
         newMessage.setSenderUserUid(mAuth.getCurrentUser().getUid());
+        sendMessage(newMessage);
+    }
 
+    private void sendMessage(Message message){
         // Add the message into the conversation for the current user
         String messageId = messagesDatabase.push().getKey();
-        newMessage.setMessageId(messageId);
-        messagesDatabase.child(messageId).setValue(newMessage);
+        message.setMessageId(messageId);
+        messagesDatabase.child(messageId).setValue(message);
+
+        // Create the conversation in case it does not exist
+        Map<String, Object> conversationUpdate = new HashMap<>();
+        conversationUpdate.put("/withUser/", mAuth.getCurrentUser().getUid());
+        conversationUpdate.put("/conversationId/", conversationId);
+        conversationUpdate.put("/lastMessageDate/", new Date());
+        conversationUpdate.put("/hasNewMessages/", true);
+
+        FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).updateChildren(conversationUpdate);
 
         // Add the message to the conversation for the user receiving the message
         String receiverMessageId = FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("messages").push().getKey();
-        newMessage.setMessageId(receiverMessageId);
-        FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("messages").child(receiverMessageId).setValue(newMessage);
+        message.setMessageId(receiverMessageId);
 
-        // Create the corresponding conversation to the user who receives the message in case it does not exist.
-        FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("withUser").setValue(mAuth.getCurrentUser().getUid());
-        FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("conversationId").setValue(conversationId);
-        FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("lastMessageDate").setValue(new Date());
-        FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("hasNewMessages").setValue(true);
+        // Add the message
+        FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("messages").child(receiverMessageId).setValue(message);
     }
 
     private void sendPicture(){
@@ -164,23 +172,9 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerVi
                     final Message newMessage = new Message();
                     newMessage.setMessageText(null);
                     newMessage.setSenderUserUid(mAuth.getCurrentUser().getUid());
-
-                    // Add the message into the conversation for the current user
-
-                    newMessage.setMessageId(messageId);
                     newMessage.setMessageImageUrl(taskSnapshot.getDownloadUrl().toString());
-                    messagesDatabase.child(messageId).setValue(newMessage);
 
-                    // Add the message to the conversation for the user receiving the message
-                    String receiverMessageId = FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("messages").push().getKey();
-                    newMessage.setMessageId(receiverMessageId);
-                    FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("messages").child(receiverMessageId).setValue(newMessage);
-
-                    // Create the corresponding conversation to the user who receives the message in case it does not exist.
-                    FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("withUser").setValue(mAuth.getCurrentUser().getUid());
-                    FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("conversationId").setValue(conversationId);
-                    FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("lastMessageDate").setValue(new Date());
-                    FirebaseDatabase.getInstance().getReference(toUser).child(conversationId).child("hasNewMessages").setValue(true);
+                    sendMessage(newMessage);
                 }
             });
 

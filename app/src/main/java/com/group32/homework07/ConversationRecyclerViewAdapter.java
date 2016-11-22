@@ -119,6 +119,14 @@ public class ConversationRecyclerViewAdapter extends RecyclerView.Adapter<Conver
                         userDatabase.child(currentConversation.getConversationId()).setValue(null);
                     }
                 });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.setTitle("Delete Conversation");
+                builder.setMessage("Are you sure you want to delete this entire conversation?");
                 builder.show();
                 return true;
             }

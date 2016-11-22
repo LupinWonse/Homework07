@@ -13,6 +13,8 @@ import android.widget.Switch;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +26,9 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 public class ProfileActivity extends AppCompatActivity{
 
@@ -61,6 +65,9 @@ public class ProfileActivity extends AppCompatActivity{
         mAuth = FirebaseAuth.getInstance();
         //mAuth.addAuthStateListener(this);
 
+        currentUser = new User();
+        currentUser.setGender(false);
+
         // Check user is logged in and display profile data
         if (mAuth.getCurrentUser() != null) {
             DatabaseReference userDatabaseReference =  FirebaseDatabase.getInstance().getReference("users").child(mAuth.getCurrentUser().getUid());
@@ -78,6 +85,7 @@ public class ProfileActivity extends AppCompatActivity{
                         currentUser = new User();
                         currentUser.setEmail(mAuth.getCurrentUser().getEmail());
                         currentUser.setUid(mAuth.getCurrentUser().getUid());
+                        currentUser.setGender(false);
                     }
                 }
                 @Override
@@ -86,6 +94,17 @@ public class ProfileActivity extends AppCompatActivity{
             });
         }
 
+        Uri photoUrl = null;
+
+
+        // Can we check if name is already provided?
+        for (UserInfo userData:mAuth.getCurrentUser().getProviderData()) {
+            if (userData.getDisplayName().length() > 0) {
+                currentUser.setFirstName(userData.getDisplayName().split(" ")[0]);
+                currentUser.setLastName(userData.getDisplayName().split(" ")[1]);
+            }
+        }
+        displayUser();
 
         mDatabase = FirebaseDatabase.getInstance();
 
