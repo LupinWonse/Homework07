@@ -1,25 +1,45 @@
 package com.group32.homework07;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static com.group32.homework07.ProfileActivity.USER_PROFILE_REQUEST_CODE;
 
 public class SignupActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
     private Button buttonSignup, buttonCancel;
+    private ImageButton imageButtonPicture;
+    //private InputStream profilePictureInputStream = null;
+    private Uri profilePictureUri = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +62,14 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        imageButtonPicture = (ImageButton) findViewById(R.id.imageSignupPicture);
+        imageButtonPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changePicture();
             }
         });
     }
@@ -108,10 +136,43 @@ public class SignupActivity extends AppCompatActivity {
                     String userId = task.getResult().getUser().getUid();
                     User user = new User(firstname,lastname,userId,email,gender);
                     FirebaseDatabase.getInstance().getReference("users").child(userId).setValue(user);
+
+                    if (profilePictureUri != null){
+                        try {
+                            InputStream profilePictureInputStream = getContentResolver().openInputStream(profilePictureUri);
+                            StorageReference profilePictureStorageReference = FirebaseStorage.getInstance().getReference("profilePictures").child(userId);
+                            profilePictureStorageReference.putStream(profilePictureInputStream);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
                     finish();
                 }
             }
         });
+
+
+    }
+
+    private void changePicture(){
+        Intent getPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getPhotoIntent.setType("image/*");
+        startActivityForResult(getPhotoIntent, USER_PROFILE_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == USER_PROFILE_REQUEST_CODE && resultCode == RESULT_OK){
+            try {
+                profilePictureUri = data.getData();
+                InputStream profilePictureInputStream = this.getContentResolver().openInputStream(profilePictureUri);
+                Bitmap profilePicture = BitmapFactory.decodeStream(profilePictureInputStream);
+                imageButtonPicture.setImageBitmap(profilePicture);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 

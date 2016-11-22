@@ -1,21 +1,18 @@
 package com.group32.homework07;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
 
@@ -36,7 +33,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
         private TextView textTime;
         private ImageView imageMessagePhoto;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             textSender = (TextView) itemView.findViewById(R.id.textMessageSender);
@@ -58,20 +55,23 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
 
         // If this message is a SENT message we have to adapt the view
         if (currentMessage.getSenderUserUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-            holder.textSender.setGravity(Gravity.RIGHT);
-            holder.textMessageText.setGravity(Gravity.RIGHT);
-            holder.textTime.setGravity(Gravity.RIGHT);
+            holder.textSender.setGravity(Gravity.END);
+            holder.textMessageText.setGravity(Gravity.END);
+            holder.textTime.setGravity(Gravity.END);
         } else {
-            holder.textSender.setGravity(Gravity.LEFT);
-            holder.textMessageText.setGravity(Gravity.LEFT);
-            holder.textTime.setGravity(Gravity.LEFT);
+            holder.textSender.setGravity(Gravity.START);
+            holder.textMessageText.setGravity(Gravity.START);
+            holder.textTime.setGravity(Gravity.START);
         }
 
         // Instead we should try to get the user name from the database
         FirebaseDatabase.getInstance().getReference("users").child(currentMessage.getSenderUserUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                holder.textSender.setText(dataSnapshot.child("firstName").getValue(String.class) + dataSnapshot.child("lastName").getValue(String.class));
+                String firstname = dataSnapshot.child("firstName").getValue(String.class);
+                String lastname = dataSnapshot.child("lastName").getValue(String.class);
+
+                holder.textSender.setText(holder.itemView.getContext().getString(R.string.full_name,firstname,lastname));
             }
 
             @Override

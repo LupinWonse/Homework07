@@ -153,7 +153,7 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerVi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == MESSAGE_PHOTO_REQUEST_CODE){
+        if(requestCode == MESSAGE_PHOTO_REQUEST_CODE && resultCode == RESULT_OK){
 
             final String messageId = messagesDatabase.push().getKey();
 

@@ -203,6 +203,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
             if (result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+            } else {
+                Toast.makeText(MainActivity.this,result.getStatus().toString(),Toast.LENGTH_SHORT).show();
             }
         } else {
             // Facebook login

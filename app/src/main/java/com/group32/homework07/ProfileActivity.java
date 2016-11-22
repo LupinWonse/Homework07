@@ -99,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity{
 
         // Can we check if name is already provided?
         for (UserInfo userData:mAuth.getCurrentUser().getProviderData()) {
-            if (userData.getDisplayName().length() > 0) {
+            if (userData.getDisplayName() != null && userData.getDisplayName().length() > 0) {
                 currentUser.setFirstName(userData.getDisplayName().split(" ")[0]);
                 currentUser.setLastName(userData.getDisplayName().split(" ")[1]);
             }
