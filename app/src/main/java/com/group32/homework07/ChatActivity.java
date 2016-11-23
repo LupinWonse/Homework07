@@ -177,9 +177,6 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerVi
                     sendMessage(newMessage);
                 }
             });
-
-
-
         }
     }
 
@@ -187,5 +184,11 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerVi
     public void deleteMessage(String messageId) {
         // Delete the message ONLY on the users end
         messagesDatabase.child(messageId).setValue(null);
+    }
+
+    @Override
+    protected void onStop() {
+        mDatabase.getReference(mAuth.getCurrentUser().getUid()).child(conversationId).child("hasNewMessages").setValue(false);
+        super.onStop();
     }
 }
