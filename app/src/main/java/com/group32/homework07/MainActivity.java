@@ -241,7 +241,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()){
                         Intent intent = new Intent(MainActivity.this, InboxActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
+                        finish();
                     } else {
                         Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                         startActivity(intent);
